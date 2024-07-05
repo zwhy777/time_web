@@ -9,7 +9,55 @@
             <strong>{{user_name}}--时间管理系统</strong>
           </h2>
         </div>
-        <el-button type="primary" style="margin-left: 150px;">主要按钮</el-button>
+      </div>
+      <div class="upshow">
+        <el-card style="width: 33%;margin: 10px;text-align: center;">
+          <div class="showTime">
+            <div class="beginTime">
+              <span style="flex: 1;margin-bottom: 10px;">开始时间</span>
+              <span style="flex: 1;">2024-07-01</span>
+            </div>
+            <div class="endTime">
+              <span style="flex: 1;margin-bottom: 10px;">结束时间</span>
+              <span style="flex: 1;">2024-07-03</span>
+            </div>
+          </div>
+        </el-card>
+        <el-card style="width: 33%;margin: 10px;text-align: center;">
+          <div class="showTime">
+            <div class="beginTime">
+              <span style="flex: 1;margin-bottom: 10px;">工作时间（小时）</span>
+              <span style="flex: 1;">40</span>
+            </div>
+            <div class="endTime">
+              <span style="flex: 1;margin-bottom: 10px;">学习时间（小时）</span>
+              <span style="flex: 1;">41</span>
+            </div>
+          </div>
+        </el-card>
+        <el-card style="width: 33%;margin: 10px;text-align: center;">
+          <div class="showTime">
+            <div class="beginTime">
+              <span style="flex: 1;margin-bottom: 10px;">运动总次数（次）</span>
+              <span style="flex: 1;">5</span>
+            </div>
+            <div class="endTime">
+              <span style="flex: 1;margin-bottom: 10px;">娱乐总次数（次）</span>
+              <span style="flex: 1;">0</span>
+            </div>
+          </div>
+        </el-card>
+      </div>
+      <div class="pieShow">
+        <el-card style="width: 45%; height: 75vh;flex: 1;margin: 10px;text-align: center;">
+          <div style="margin-bottom: 30px;text-align: center;">各类时间汇总</div>
+          <div ref="myChart1" id="myChart1" style="width: 100%;height: 600px;"></div>
+        </el-card>
+
+        <el-card style="width: 45%; height: 75vh;flex: 1;margin: 10px;text-align: center;">
+          <div style="margin-bottom: 50px;text-align: center;">各类时间占比</div>
+          <div ref="myChart" id="myChart" style="width: 100%;height: 600px;"></div>
+        </el-card>
       </div>
     </div>
   </div>
@@ -20,6 +68,108 @@ import { get } from "@/net";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import Sidebar from "../components/sideBar/SideBar.vue";
+import * as echarts from "echarts";
+
+import { getCurrentInstance, onMounted } from "vue";
+
+onMounted(() => {
+  var chartDom1 = document.getElementById("myChart1");
+  var myChart1 = echarts.init(chartDom1);
+  var option;
+
+  const rawData = [
+    [100, 302, 301, 334, 390, 330, 320],
+    [320, 132, 101, 134, 90, 230, 210],
+    [220, 182, 191, 234, 290, 330, 310],
+    [150, 212, 201, 154, 190, 330, 410],
+    [820, 832, 901, 934, 1290, 1330, 1320],
+  ];
+  const totalData = [];
+  for (let i = 0; i < rawData[0].length; ++i) {
+    let sum = 0;
+    for (let j = 0; j < rawData.length; ++j) {
+      sum += rawData[j][i];
+    }
+    totalData.push(sum);
+  }
+  const grid = {
+    left: 100,
+    right: 100,
+    top: 50,
+    bottom: 50,
+  };
+  const series = ["杂", "运动", "睡觉", "学习", "工作"].map((name, sid) => {
+    return {
+      name,
+      type: "bar",
+      stack: "total",
+      barWidth: "60%",
+      label: {
+        show: true,
+        formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
+      },
+      data: rawData[sid].map((d, did) =>
+        totalData[did] <= 0 ? 0 : d / totalData[did]
+      ),
+    };
+  });
+  option = {
+    legend: {
+      selectedMode: false,
+    },
+    grid,
+    yAxis: {
+      type: "value",
+    },
+    xAxis: {
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    },
+    series,
+  };
+
+  option && myChart1.setOption(option);
+
+  var chartDom = document.getElementById("myChart");
+  var myChart = echarts.init(chartDom);
+  var option;
+
+  option = {
+    legend: {
+      top: "bottom",
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        restore: { show: true },
+        saveAsImage: { show: true },
+      },
+    },
+    series: [
+      {
+        name: "Nightingale Chart",
+        type: "pie",
+        radius: [50, 250],
+        center: ["50%", "50%"],
+        roseType: "area",
+        itemStyle: {
+          borderRadius: 8,
+        },
+        data: [
+          { value: 4, name: "运动" },
+          { value: 14, name: "学习" },
+          { value: 13, name: "工作" },
+          { value: 39, name: "睡觉" },
+          { value: 30, name: "杂" },
+        ],
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+});
 
 const user_name = "";
 </script>
@@ -27,6 +177,9 @@ const user_name = "";
 <style scoped>
 .app {
   display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #f2f6fc;
 }
 
 .content {
@@ -49,5 +202,39 @@ const user_name = "";
 .border {
   border-bottom: 2px solid #000;
   text-align: center;
+}
+
+.upshow {
+  display: flex;
+  flex-direction: row;
+}
+
+.showTime {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+.beginTime {
+  flex: 1;
+  width: 50%;
+  /* background-color: aqua; */
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.endTime {
+  flex: 1;
+  width: 50%;
+  /* background-color: blueviolet; */
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pieShow {
+  display: flex;
+  flex-direction: row;
 }
 </style>
