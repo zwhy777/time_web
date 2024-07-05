@@ -1,7 +1,6 @@
 <script setup>
 import Sidebar from '@/components/sideBar/SideBar.vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
 
 // 全局前置守卫

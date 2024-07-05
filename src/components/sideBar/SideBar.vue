@@ -34,8 +34,12 @@ export default {
 
 <style>
 .sidebar {
+  margin: 5px 0;
   width: 200px;
-  background-color: #20232a;
+  background-color: #2b2b3c;
+  border-radius: 10px;
+  background-image: linear-gradient(135deg, #2b2b3c 0%, #444b85 100%);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
   left: 0;
