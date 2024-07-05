@@ -21,21 +21,70 @@
         </div>
         <div style="margin: 3%; height: 80vh;">
           <div style="text-align: right;">
-            <el-button color="#c4d4ec"><label class="font">添加行程</label></el-button>
+            <el-button color="#c4d4ec" @click="dialogVisible = true"><label class="font ">添加行程</label></el-button>
           </div>
+          <el-dialog v-model="dialogVisible" title="增加行程" width="1000" :before-close="handleClose">
+            <div style="padding: 20px 30px; margin: 10px 20px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);">
+              <el-form :model="form" label-width="auto" style="max-width: 800px; ">
+                <el-form-item>
+                  <div class="font2">行程名：</div>
+                  <el-input placeholder="请输入行程名" v-model="form.name" style="width: 60%;" />
+                </el-form-item>
+                <el-form-item>
+                  <div class="font2">行程类型：</div>
+                  <el-select v-model="form.type" placeholder="请选择该行程类型" style="width: 60%;">
+                    <el-option label="娱乐" value="play" />
+                    <el-option label="学习" value="study" />
+                    <el-option label="工作" value="work" />
+                    <el-option label="运动" value="sport" />
+                    <el-option label="睡觉" value="sleep" />
+                    <el-option label="杂事" value="chores" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <div class="font2">活动时间：</div>
+                  <el-date-picker v-model="form.date" type="date" placeholder="选择日期" style="width: 28%; margin-right: 4%;" />
+                  <el-date-picker v-model="form.time" type="date" placeholder="选择日期" style="width: 28%" />
+                </el-form-item>
+                <el-form-item>
+                  <div class="font2">活动时长：</div>
+                  <el-input placeholder="hour" v-model="form.hour" style="width: 10%;" />
+                  <div class="font2" style="width: 4%; text-align: center;">时</div>
+                  <el-input placeholder="minute" v-model="form.minute" style="width: 10%;" />
+                  <div class="font2" style="width: 4%; text-align: center;">分</div>
+                </el-form-item>
+                <el-form-item>
+                  <div class="font2">备注：</div>
+                  <el-input placeholder="请输入备注" v-model="form.remark" style="width: 60%;" />
+                </el-form-item>
+              </el-form>
+            </div>
+            <template #footer>
+              <div class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">
+                  确认
+                </el-button>
+              </div>
+            </template>
+          </el-dialog>
           <div style="margin-top: 30px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);">
             <el-table :data="tableData" stripe style="width: 100%; height: 70vh;">
               <el-table-column prop="date" label="日期" width="280" />
               <el-table-column prop="time" label="时间" width="400" />
               <el-table-column prop="name" label="行程名称" width="280" />
               <el-table-column prop="type" label="类型" width="180" />
-              <el-table-column prop="name" label="操作" />
+              <el-table-column prop="id" label="操作" fixed="right">
+                <template v-slot="{ row }">
+                  <el-button type="danger" size="small" @click="deleteLine(row.id)">
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
@@ -47,6 +96,7 @@ import { useRouter } from "vue-router";
 import Sidebar from '../components/sideBar/SideBar.vue';
 import { More } from '@element-plus/icons-vue'
 import router from "@/router";
+import { ref, reactive } from "vue";
 
 
 const logout = () => {
@@ -57,32 +107,53 @@ const logout = () => {
   // router.push('/');
 };
 
-const tableData = [
+const deleteLine = (id) => {
+  tableData.value = tableData.value.filter(item => item.id != id)
+}
+
+const dialogVisible = ref(false);
+
+const form = reactive({
+  name: '',
+  type: '',
+  date: '',
+  time: '',
+  hour: '',
+  minute: '',
+  remark: '',
+})
+
+
+const tableData = ref([
   {
+    id: 1,
     date: '2016-05-03',
     name: 'Tom',
     time: 'No. 189, Grove St, Los Angeles',
     type: ''
   },
   {
+    id: 2,
     date: '2016-05-02',
     name: 'Tom',
     time: 'No. 189, Grove St, Los Angeles',
     type: ''
   },
   {
+    id: 3,
     date: '2016-05-04',
     name: 'Tom',
     time: 'No. 189, Grove St, Los Angeles',
     type: ''
   },
   {
+    id: 4,
     date: '2016-05-01',
     name: 'Tom',
     time: 'No. 189, Grove St, Los Angeles',
     type: ''
   },
-]
+])
 </script>
 
 <style scoped>
@@ -117,5 +188,12 @@ const tableData = [
   font-size: 15px;
   color: #303133;
   font-weight: 600;
+}
+
+.font2 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #303133;
+  width: 100px;
 }
 </style>
