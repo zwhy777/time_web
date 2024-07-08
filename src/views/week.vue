@@ -15,11 +15,11 @@
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1;margin-bottom: 10px;">开始时间</span>
-              <span style="flex: 1;">2024-07-01</span>
+              <span style="flex: 1;">{{beginTime}}</span>
             </div>
             <div class="endTime">
               <span style="flex: 1;margin-bottom: 10px;">结束时间</span>
-              <span style="flex: 1;">2024-07-03</span>
+              <span style="flex: 1;">{{endTime}}</span>
             </div>
           </div>
         </el-card>
@@ -27,11 +27,11 @@
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1;margin-bottom: 10px;">工作时间（小时）</span>
-              <span style="flex: 1;">40</span>
+              <span style="flex: 1;">{{worktime}}</span>
             </div>
             <div class="endTime">
               <span style="flex: 1;margin-bottom: 10px;">学习时间（小时）</span>
-              <span style="flex: 1;">41</span>
+              <span style="flex: 1;">{{studytime}}</span>
             </div>
           </div>
         </el-card>
@@ -39,11 +39,11 @@
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1;margin-bottom: 10px;">运动总次数（次）</span>
-              <span style="flex: 1;">5</span>
+              <span style="flex: 1;">{{sporttime}}</span>
             </div>
             <div class="endTime">
               <span style="flex: 1;margin-bottom: 10px;">娱乐总次数（次）</span>
-              <span style="flex: 1;">0</span>
+              <span style="flex: 1;">{{playtime}}</span>
             </div>
           </div>
         </el-card>
@@ -64,14 +64,21 @@
 </template>
 
 <script setup>
-import { get } from "@/net";
+import { get, post } from "@/net";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import Sidebar from "../components/sideBar/SideBar.vue";
 import * as echarts from "echarts";
+import { ref, reactive } from "vue";
 
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, onBeforeMount, onMounted } from "vue";
 
+const beginTime = ref("");
+const endTime = ref("");
+const worktime = ref("");
+const studytime = ref("");
+const sporttime = ref("");
+const playtime = ref("");
 onMounted(() => {
   var chartDom1 = document.getElementById("myChart1");
   var myChart1 = echarts.init(chartDom1);
@@ -171,6 +178,48 @@ onMounted(() => {
   option && myChart.setOption(option);
 });
 
+//将Date格式的日期转换为2024-07-08的格式
+const formatDate = (date) => {
+  const d = new Date(date);
+  let month = "" + (d.getMonth() + 1);
+  let day = "" + d.getDate();
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
+
+onBeforeMount(() => {
+  let currentDate = new Date();
+  let currentDay = currentDate.getDay();
+  let diff = currentDate.getDate() - currentDay + (currentDay == 0 ? -6 : 1); // 计算本周周一的日期
+  let monday = new Date(currentDate.setDate(diff));
+
+  console.log(formatDate(monday));
+  beginTime.value = formatDate(monday);
+
+  let sunday = new Date(currentDate.setDate(diff + 6)); // 计算本周周末的日期
+  console.log(formatDate(sunday));
+  endTime.value = formatDate(sunday);
+
+  post(
+    "/api/index/show_week",
+    {
+      begin: beginTime.value,
+      end: endTime.value,
+    },
+    (data) => {
+      worktime.value = data[0];
+      studytime.value = data[1];
+      sporttime.value = data[2];
+      playtime.value = data[3];
+      console.log(data[0]);
+      ElMessage.success("新建成功");
+    }
+  );
+});
 const user_name = "";
 </script>
 
