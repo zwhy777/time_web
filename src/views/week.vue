@@ -5,58 +5,90 @@
       <router-view></router-view>
       <div class="border">
         <div class="header_center">
-          <h2>
-            <strong>{{user_name}}--时间管理系统</strong>
-          </h2>
+          <strong>时间管理系统</strong>
         </div>
       </div>
       <div class="upshow">
-        <el-card style="width: 33%;margin: 10px;text-align: center;">
+        <el-card
+          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
+        >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1;margin-bottom: 10px;">开始时间</span>
-              <span style="flex: 1;">{{beginTime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">开始时间</span>
+              <span style="flex: 1">{{ beginTime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1;margin-bottom: 10px;">结束时间</span>
-              <span style="flex: 1;">{{endTime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">结束时间</span>
+              <span style="flex: 1">{{ endTime }}</span>
             </div>
           </div>
         </el-card>
-        <el-card style="width: 33%;margin: 10px;text-align: center;">
+        <el-card
+          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
+        >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1;margin-bottom: 10px;">工作时间（小时）</span>
-              <span style="flex: 1;">{{worktime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">工作时间（小时）</span>
+              <span style="flex: 1">{{ worktime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1;margin-bottom: 10px;">学习时间（小时）</span>
-              <span style="flex: 1;">{{studytime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">学习时间（小时）</span>
+              <span style="flex: 1">{{ studytime }}</span>
             </div>
           </div>
         </el-card>
-        <el-card style="width: 33%;margin: 10px;text-align: center;">
+        <el-card
+          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
+        >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1;margin-bottom: 10px;">运动总次数（次）</span>
-              <span style="flex: 1;">{{sporttime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">运动总次数（次）</span>
+              <span style="flex: 1">{{ sporttime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1;margin-bottom: 10px;">娱乐总次数（次）</span>
-              <span style="flex: 1;">{{playtime}}</span>
+              <span style="flex: 1; margin-bottom: 10px">娱乐总次数（次）</span>
+              <span style="flex: 1">{{ playtime }}</span>
             </div>
           </div>
         </el-card>
       </div>
       <div class="pieShow">
-        <el-card style="width: 45%; height: 75vh;flex: 1;margin: 10px;text-align: center;">
-          <div style="margin-bottom: 30px;text-align: center;">各类时间汇总</div>
-          <div ref="myChart1" id="myChart1" style="width: 100%;height: 600px;"></div>
+        <el-card
+          style="
+            width: 45%;
+            height: 70vh;
+            flex: 1;
+            margin: 10px;
+            text-align: center;
+          "
+        >
+          <div style="margin-bottom: 30px; text-align: center">
+            各类时间汇总
+          </div>
+          <div
+            ref="myChart1"
+            id="myChart1"
+            style="width: 100%; height: 55vh"
+          ></div>
         </el-card>
 
-        <el-card style="width: 45%; height: 75vh;flex: 1;margin: 10px;text-align: center;">
-          <div style="margin-bottom: 50px;text-align: center;">各类时间占比</div>
-          <div ref="myChart" id="myChart" style="width: 100%;height: 600px;"></div>
+        <el-card
+          style="
+            width: 45%;
+            height: 70vh;
+            flex: 1;
+            margin: 10px;
+            text-align: center;
+          "
+        >
+          <div style="margin-bottom: 50px; text-align: center">
+            各类时间占比
+          </div>
+          <div
+            ref="myChart"
+            id="myChart"
+            style="width: 100%; height: 55vh"
+          ></div>
         </el-card>
       </div>
     </div>
@@ -79,104 +111,152 @@ const worktime = ref("");
 const studytime = ref("");
 const sporttime = ref("");
 const playtime = ref("");
-onMounted(() => {
-  var chartDom1 = document.getElementById("myChart1");
-  var myChart1 = echarts.init(chartDom1);
-  var option;
+const rawData = ref([]);
 
-  const rawData = [
-    [100, 302, 301, 334, 390, 330, 320],
-    [320, 132, 101, 134, 90, 230, 210],
-    [220, 182, 191, 234, 290, 330, 310],
-    [150, 212, 201, 154, 190, 330, 410],
-    [820, 832, 901, 934, 1290, 1330, 1320],
-  ];
-  const totalData = [];
-  for (let i = 0; i < rawData[0].length; ++i) {
-    let sum = 0;
-    for (let j = 0; j < rawData.length; ++j) {
-      sum += rawData[j][i];
-    }
-    totalData.push(sum);
-  }
-  const grid = {
-    left: 100,
-    right: 100,
-    top: 50,
-    bottom: 50,
-  };
-  const series = ["杂", "运动", "睡觉", "学习", "工作"].map((name, sid) => {
-    return {
-      name,
-      type: "bar",
-      stack: "total",
-      barWidth: "60%",
-      label: {
-        show: true,
-        formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
-      },
-      data: rawData[sid].map((d, did) =>
-        totalData[did] <= 0 ? 0 : d / totalData[did]
-      ),
-    };
-  });
-  option = {
-    legend: {
-      selectedMode: false,
-    },
-    grid,
-    yAxis: {
-      type: "value",
-    },
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    },
-    series,
-  };
+onBeforeMount(() => {
 
-  option && myChart1.setOption(option);
-
-  var chartDom = document.getElementById("myChart");
-  var myChart = echarts.init(chartDom);
-  var option;
-
-  option = {
-    legend: {
-      top: "bottom",
+  post(
+    "/api/index/show_pieChart",
+    {
+      type: 1,
     },
-    toolbox: {
-      show: true,
-      feature: {
-        mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        restore: { show: true },
-        saveAsImage: { show: true },
-      },
-    },
-    series: [
-      {
-        name: "Nightingale Chart",
-        type: "pie",
-        radius: [50, 250],
-        center: ["50%", "50%"],
-        roseType: "area",
-        itemStyle: {
-          borderRadius: 8,
+    (data) => {
+      var chartDom = document.getElementById("myChart");
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      option = {
+        legend: {
+          top: "bottom",
         },
-        data: [
-          { value: 4, name: "运动" },
-          { value: 14, name: "学习" },
-          { value: 13, name: "工作" },
-          { value: 39, name: "睡觉" },
-          { value: 30, name: "杂" },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        series: [
+          {
+            name: "Nightingale Chart",
+            type: "pie",
+            radius: [50, 250],
+            center: ["50%", "50%"],
+            roseType: "area",
+            itemStyle: {
+              borderRadius: 8,
+            },
+            data: [
+              { value: data[0], name: "杂事" },
+              { value: data[1], name: "运动" },
+              { value: data[2], name: "睡觉" },
+              { value: data[3], name: "学习" },
+              { value: data[4], name: "工作" },
+              { value: data[5], name: "娱乐" },
+            ],
+          },
         ],
-      },
-    ],
-  };
+      };
 
-  option && myChart.setOption(option);
+      option && myChart.setOption(option);
+    }
+  )
+
+  post(
+    "/api/index/show_histogram",
+    {
+      type: 1,
+    },
+    (data) => {
+      rawData.value = data;
+      console.log(rawData.value);
+
+      let currentDate = new Date();
+      let currentDay = currentDate.getDay();
+      let diff =
+        currentDate.getDate() - currentDay + (currentDay == 0 ? -6 : 1); // 计算本周周一的日期
+      let monday = new Date(currentDate.setDate(diff));
+
+      //console.log(formatDate(monday));
+      beginTime.value = formatDate(monday);
+
+      let sunday = new Date(currentDate.setDate(diff + 6)); // 计算本周周末的日期
+      //console.log(formatDate(sunday));
+      endTime.value = formatDate(sunday);
+
+      post(
+        "/api/index/show_week",
+        {
+          begin: beginTime.value,
+          end: endTime.value,
+        },
+        (data) => {
+          worktime.value = data[0];
+          studytime.value = data[1];
+          sporttime.value = data[3];
+          playtime.value = data[2];
+        }
+      );
+
+      var chartDom1 = document.getElementById("myChart1");
+      var myChart1 = echarts.init(chartDom1);
+      var option;
+
+      const totalData = [];
+      for (let i = 0; i < rawData.value[0].length; ++i) {
+        let sum = 0;
+        for (let j = 0; j < rawData.value.length; ++j) {
+          sum += rawData.value[j][i];
+        }
+        totalData.push(sum);
+      }
+      const grid = {
+        left: 100,
+        right: 100,
+        top: 50,
+        bottom: 50,
+      };
+      const series = ["杂事", "运动", "睡觉", "学习", "工作", "娱乐"].map(
+        (name, sid) => {
+          return {
+            name,
+            type: "bar",
+            stack: "total",
+            barWidth: "60%",
+            label: {
+              show: true,
+              formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
+            },
+            data: rawData.value[sid].map((d, did) =>
+              totalData[did] <= 0 ? 0 : d / totalData[did]
+            ),
+          };
+        }
+      );
+      option = {
+        legend: {
+          selectedMode: false,
+        },
+        grid,
+        yAxis: {
+          type: "value",
+        },
+        xAxis: {
+          type: "category",
+          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        },
+        series,
+      };
+
+      option && myChart1.setOption(option);
+
+      
+    }
+  );
 });
+
 
 //将Date格式的日期转换为2024-07-08的格式
 const formatDate = (date) => {
@@ -190,37 +270,6 @@ const formatDate = (date) => {
 
   return [year, month, day].join("-");
 };
-
-onBeforeMount(() => {
-  let currentDate = new Date();
-  let currentDay = currentDate.getDay();
-  let diff = currentDate.getDate() - currentDay + (currentDay == 0 ? -6 : 1); // 计算本周周一的日期
-  let monday = new Date(currentDate.setDate(diff));
-
-  console.log(formatDate(monday));
-  beginTime.value = formatDate(monday);
-
-  let sunday = new Date(currentDate.setDate(diff + 6)); // 计算本周周末的日期
-  console.log(formatDate(sunday));
-  endTime.value = formatDate(sunday);
-
-  post(
-    "/api/index/show_week",
-    {
-      begin: beginTime.value,
-      end: endTime.value,
-    },
-    (data) => {
-      worktime.value = data[0];
-      studytime.value = data[1];
-      sporttime.value = data[2];
-      playtime.value = data[3];
-      console.log(data[0]);
-      ElMessage.success("新建成功");
-    }
-  );
-});
-const user_name = "";
 </script>
 
 <style scoped>
@@ -238,17 +287,21 @@ const user_name = "";
 }
 
 .header_center {
+  height: 7vh;
+  padding-top: 3vh;
+  padding-right: 3vw;
+  font-size: 22px;
   width: 30%;
-  margin: 0px auto;
+  margin: auto;
   color: black;
   text-align: center;
-  height: 80px;
   /* background-image: url("./week_image/logoBg.png");
   background-size: 100% 100%; */
   font-family: "微软雅黑" !important;
   display: inline-block;
 }
 .border {
+  height: 10vh;
   border-bottom: 2px solid #000;
   text-align: center;
 }
@@ -260,12 +313,14 @@ const user_name = "";
 
 .showTime {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   text-align: center;
 }
 .beginTime {
   flex: 1;
+  height: 100%;
   width: 50%;
   /* background-color: aqua; */
   margin: 10px;
