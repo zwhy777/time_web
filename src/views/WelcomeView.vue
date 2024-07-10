@@ -5,8 +5,8 @@
                 src="https://ts1.cn.mm.bing.net/th/id/R-C.d0bd3565ac8ba1be161ed4924a3ecd4c?rik=ETrP2K0UNpL6TQ&riu=http%3a%2f%2fimage.uokon.cn%2f1872-time.jpg&ehk=DN%2fOsw8tkEm5smMflOOY728iXf2NYEIdnVsukPvhG2A%3d&risl=&pid=ImgRaw&r=0"></el-image>
     </div>
     <div class="welcome-title">
-      <div style="font-size: 30px;font-weight: bold" :style="{ width: `${windowWidth - 350}px` }">欢迎来到时间管理系统</div>
-      <div style="font-size: 18px;margin-top: 1vh" :style="{ width: `${windowWidth - 350}px` }">通过本系统可以充分管理和分配自身的时间，提高效率</div>
+      <div style="font-size: 30px;font-weight: bold" :style="{ width: `${windowWidth - 350}px` }">Welcome to the Time Management System</div>
+      <div style="font-size: 18px;margin-top: 1vh" :style="{ width: `${windowWidth - 350}px` }">With this system, you can fully manage and allocate your time and improve efficiency</div>
     </div>
     <div style="width: 20vw;min-width: 300px">
       <router-view v-slot="{Component}">

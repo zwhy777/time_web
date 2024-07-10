@@ -5,7 +5,7 @@
       <router-view></router-view>
       <div>
         <div class="title">
-          <strong style="display: inline-block">行程</strong>
+          <strong style="display: inline-block">Activity</strong>
 
           <div style="float: right">
             <el-dropdown>
@@ -16,14 +16,14 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                  <el-dropdown-item @click="logout">Sign out</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
         </div>
         <div style="margin: 3%; height: 80vh; text-align: center; width: 80vw">
-          <div style="width: 10vw; display: inline-block; margin-right: 60vw">
+          <div style="width: 20vw; display: inline-block; margin-right: 50vw">
             <el-segmented
               v-model="tripType"
               :options="options"
@@ -33,12 +33,12 @@
           </div>
           <div style="display: inline-block">
             <el-button color="#c4d4ec" @click="dialogVisible = true">
-              <label class="font">添加行程</label>
+              <label class="font">Add an activity</label>
             </el-button>
           </div>
           <el-dialog
             v-model="dialogVisible"
-            title="增加行程"
+            title="Add an activity"
             width="1000"
             :before-close="handleClose"
           >
@@ -55,46 +55,46 @@
                 style="max-width: 800px"
               >
                 <el-form-item>
-                  <div class="font2">行程名：</div>
+                  <div class="font2">Activity name:</div>
                   <el-input
-                    placeholder="请输入行程名"
+                    placeholder="Please enter an activity name"
                     v-model="form.name"
                     style="width: 60%"
                   />
                 </el-form-item>
                 <el-form-item>
-                  <div class="font2">行程类型：</div>
+                  <div class="font2">Activity type:</div>
                   <el-select
                     v-model="form.type"
-                    placeholder="请选择该行程类型"
+                    placeholder="Please select an activity type"
                     style="width: 60%"
                   >
-                    <el-option label="娱乐" value="娱乐" />
-                    <el-option label="学习" value="学习" />
-                    <el-option label="工作" value="工作" />
-                    <el-option label="运动" value="运动" />
-                    <el-option label="睡觉" value="睡觉" />
-                    <el-option label="杂事" value="杂事" />
+                    <el-option label="amusement" value="amusement" />
+                    <el-option label="study" value="study" />
+                    <el-option label="work" value="work" />
+                    <el-option label="sport" value="sport" />
+                    <el-option label="sleep" value="sleep" />
+                    <el-option label="chores" value="chores" />
                   </el-select>
                 </el-form-item>
                 <el-form-item>
-                  <div class="font2">活动时间：</div>
+                  <div class="font2">Activity time:</div>
                   <div style="width: 60%">
                     <el-date-picker
                       v-model="time"
                       type="datetimerange"
                       range-separator="To"
-                      start-placeholder="开始时间"
-                      end-placeholder="结束时间"
+                      start-placeholder="start time"
+                      end-placeholder="end time"
                       format="YYYY-MM-DD HH:mm:ss"
                       value-format="YYYY-MM-DD HH:mm:ss"
                     />
                   </div>
                 </el-form-item>
                 <el-form-item>
-                  <div class="font2">备注：</div>
+                  <div class="font2">note:</div>
                   <el-input
-                    placeholder="请输入备注"
+                    placeholder="Please enter a note"
                     v-model="form.remark"
                     style="width: 60%"
                   />
@@ -103,8 +103,8 @@
             </div>
             <template #footer>
               <div class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="addTrip">确认</el-button>
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="addTrip">Confirm</el-button>
               </div>
             </template>
           </el-dialog>
@@ -115,17 +115,17 @@
             "
           >
             <el-table :data="showData" stripe style="width: 100%; height: 70vh">
-              <el-table-column prop="beginTime" label="日期" width="280" />
-              <el-table-column prop="endTime" label="时间" width="400" />
-              <el-table-column prop="name" label="行程名称" width="280" />
-              <el-table-column prop="type" label="类型" width="180" />
-              <el-table-column prop="id" label="操作" fixed="right">
+              <el-table-column prop="beginTime" label="Date" width="280" />
+              <el-table-column prop="endTime" label="Duration" width="400" />
+              <el-table-column prop="name" label="Activate name" width="280" />
+              <el-table-column prop="type" label="Activate type" width="180" />
+              <el-table-column prop="id" label="Operation" fixed="right">
                 <template v-slot="{ row }">
                   <el-button
                     type="danger"
                     size="small"
                     @click="deleteLine(row.id)"
-                    >删除</el-button
+                    >Delete</el-button
                   >
                 </template>
               </el-table-column>
@@ -147,8 +147,8 @@ import router from "@/router";
 import { ref, reactive, onBeforeMount } from "vue";
 // import { fr } from "element-plus/es/locale";
 
-const options = ["所有行程", "每日行程"];
-const tripType = ref("所有行程");
+const options = ["All activate", "Daily activate"];
+const tripType = ref("All activate");
 const tableData = ref([]);
 const showData = ref([]);
 
@@ -194,7 +194,7 @@ function calculateDuration(startDateStr, endDateStr) {
 }
 
 const changeType = () => {
-  if (tripType.value == "每日行程") {
+  if (tripType.value == "Daily activate") {
     showData.value = [];
     let currentDate = new Date();
     tableData.value.forEach((element) => {
@@ -321,6 +321,6 @@ const form = reactive({
   font-size: 16px;
   font-weight: 500;
   color: #303133;
-  width: 100px;
+  width: 200px;
 }
 </style>

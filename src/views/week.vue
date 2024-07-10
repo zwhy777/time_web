@@ -5,7 +5,7 @@
       <router-view></router-view>
       <div class="border">
         <div class="header_center">
-          <strong>时间管理系统</strong>
+          <strong>Time management system</strong>
         </div>
       </div>
       <div class="upshow">
@@ -14,11 +14,11 @@
         >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1; margin-bottom: 10px">开始时间</span>
+              <span style="flex: 1; margin-bottom: 10px">Start time</span>
               <span style="flex: 1">{{ beginTime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1; margin-bottom: 10px">结束时间</span>
+              <span style="flex: 1; margin-bottom: 10px">End time</span>
               <span style="flex: 1">{{ endTime }}</span>
             </div>
           </div>
@@ -28,11 +28,15 @@
         >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1; margin-bottom: 10px">工作时间（小时）</span>
+              <span style="flex: 1; margin-bottom: 10px"
+                >Working hours(hour)</span
+              >
               <span style="flex: 1">{{ worktime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1; margin-bottom: 10px">学习时间（小时）</span>
+              <span style="flex: 1; margin-bottom: 10px"
+                >Studying hours(hour)</span
+              >
               <span style="flex: 1">{{ studytime }}</span>
             </div>
           </div>
@@ -42,11 +46,11 @@
         >
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1; margin-bottom: 10px">运动总次数（次）</span>
+              <span style="flex: 1; margin-bottom: 10px">Sports(times)</span>
               <span style="flex: 1">{{ sporttime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1; margin-bottom: 10px">娱乐总次数（次）</span>
+              <span style="flex: 1; margin-bottom: 10px">Amusement(times)</span>
               <span style="flex: 1">{{ playtime }}</span>
             </div>
           </div>
@@ -63,7 +67,7 @@
           "
         >
           <div style="margin-bottom: 30px; text-align: center">
-            各类时间汇总
+            Summary of various types of time
           </div>
           <div
             ref="myChart1"
@@ -82,7 +86,7 @@
           "
         >
           <div style="margin-bottom: 50px; text-align: center">
-            各类时间占比
+            All kinds of time proportion
           </div>
           <div
             ref="myChart"
@@ -114,7 +118,6 @@ const playtime = ref("");
 const rawData = ref([]);
 
 onBeforeMount(() => {
-
   post(
     "/api/index/show_pieChart",
     {
@@ -149,12 +152,12 @@ onBeforeMount(() => {
               borderRadius: 8,
             },
             data: [
-              { value: data[0], name: "杂事" },
-              { value: data[1], name: "运动" },
-              { value: data[2], name: "睡觉" },
-              { value: data[3], name: "学习" },
-              { value: data[4], name: "工作" },
-              { value: data[5], name: "娱乐" },
+              { value: data[0], name: "chores" },
+              { value: data[1], name: "sport" },
+              { value: data[2], name: "sleep" },
+              { value: data[3], name: "study" },
+              { value: data[4], name: "work" },
+              { value: data[5], name: "amusement" },
             ],
           },
         ],
@@ -162,7 +165,7 @@ onBeforeMount(() => {
 
       option && myChart.setOption(option);
     }
-  )
+  );
 
   post(
     "/api/index/show_histogram",
@@ -218,7 +221,7 @@ onBeforeMount(() => {
         top: 50,
         bottom: 50,
       };
-      const series = ["杂事", "运动", "睡觉", "学习", "工作", "娱乐"].map(
+      const series = ["chores", "sport", "sleep", "study", "work", "amusement"].map(
         (name, sid) => {
           return {
             name,
@@ -251,12 +254,9 @@ onBeforeMount(() => {
       };
 
       option && myChart1.setOption(option);
-
-      
     }
   );
 });
-
 
 //将Date格式的日期转换为2024-07-08的格式
 const formatDate = (date) => {
@@ -323,7 +323,7 @@ const formatDate = (date) => {
   height: 100%;
   width: 50%;
   /* background-color: aqua; */
-  margin: 10px;
+  margin: 5px 10px 10px 10px;
   display: flex;
   flex-direction: column;
 }
@@ -332,7 +332,7 @@ const formatDate = (date) => {
   flex: 1;
   width: 50%;
   /* background-color: blueviolet; */
-  margin: 10px;
+  margin: 5px 10px 10px 10px;
   display: flex;
   flex-direction: column;
 }

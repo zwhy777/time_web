@@ -1,34 +1,34 @@
 <template>
   <div style="margin: 0 2vw;text-align: center">
     <div style="margin-top: 8vh">
-      <div style="font-size: 25px">注册新用户</div>
-      <div style="font-size: 14px;color: grey;margin-top: 1vh">欢迎注册生物安全平台，请在下方填写相信息。</div>
+      <div style="font-size: 25px">Register a new user</div>
+      <div style="font-size: 14px;color: grey;margin-top: 1vh">Welcome to register for the biosecurity platform, please fill in the photo information below.</div>
     </div>
     <div style="margin-top: 4vh">
       <el-form :model="form" :rules="rules" @validate="onValidate" ref="formRef">
         <el-form-item prop="username">
-          <el-input v-model="form.username" type="text" placeholder="用户名">
+          <el-input v-model="form.username" type="text" placeholder="Username">
             <template #prefix>
               <el-icon><user/></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="form.password" type="password" placeholder="密码">
+          <el-input v-model="form.password" type="password" placeholder="Password">
             <template #prefix>
               <el-icon><lock/></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password_repeat">
-          <el-input v-model="form.password_repeat" type="password" placeholder="重复密码">
+          <el-input v-model="form.password_repeat" type="password" placeholder="Repeat the password">
             <template #prefix>
               <el-icon><lock/></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="email">
-          <el-input v-model="form.email" type="email" placeholder="电子邮箱">
+          <el-input v-model="form.email" type="email" placeholder="Email">
             <template #prefix>
               <el-icon><message/></el-icon>
             </template>
@@ -37,7 +37,7 @@
         <el-form-item prop="code">
           <el-row style="width: 100%;margin: 0">
             <el-col :span="14">
-              <el-input v-model="form.code" type="text" placeholder="请输入验证码">
+              <el-input v-model="form.code" type="text" placeholder="verification code">
                 <template #prefix>
                   <el-icon><EditPen/></el-icon>
                 </template>
@@ -45,7 +45,7 @@
             </el-col>
             <el-col :span="10" style="padding: 0;text-align: right">
               <el-button type="success" @click="validateEmail" :disabled="!isEmailValid || coldTime > 0">
-                {{coldTime > 0 ? "请稍后 "+ coldTime + "秒" : '获取验证码'}}
+                {{coldTime > 0 ? "Please wait"+ coldTime + "second" : 'get a code'}}
               </el-button>
             </el-col>
           </el-row>
@@ -53,11 +53,11 @@
       </el-form>
     </div>
     <div style="margin-top: 8vh">
-      <el-button style="width: 12vw" type="warning" plain @click="regeister">立即注册</el-button>
+      <el-button style="width: 12vw" type="warning" plain @click="regeister">Sign up</el-button>
     </div>
     <div style="margin-top: 2vh">
-      <span style="font-size: 14px;color: grey">已有帐号？</span>
-      <el-link type="primary" style="translate: 0 -2px" @click="router.push('/')">立即登录</el-link>
+      <span style="font-size: 14px;color: grey">Already have an account?  </span>
+      <el-link type="primary" style="translate: 0 -2px" @click="router.push('/')">Log in</el-link>
     </div>
   </div>
 </template>

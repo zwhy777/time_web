@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       menuItems: [
-        { id: 1, name: '行程', isActive: true, route: 'index' },
-        { id: 2, name: '每周概况', isActive: false, route: 'week' },
-        { id: 3, name: '每月概况', isActive: false, route: 'month' },
-        { id: 4, name: '每年概况', isActive: false, route: 'year' },
+        { id: 1, name: 'Activity', isActive: true, route: 'index' },
+        { id: 2, name: 'Weekly overview', isActive: false, route: 'week' },
+        { id: 3, name: 'Monthly overview', isActive: false, route: 'month' },
+        { id: 4, name: 'Yearly overview', isActive: false, route: 'year' },
         // 添加更多菜单项...
       ]
     };
