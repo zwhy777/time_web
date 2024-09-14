@@ -9,9 +9,7 @@
         </div>
       </div>
       <div class="upshow">
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1; margin-bottom: 10px">Start time</span>
@@ -23,27 +21,19 @@
             </div>
           </div>
         </el-card>
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1; margin-bottom: 10px"
-                >Working hours(hour)</span
-              >
+              <span style="flex: 1; margin-bottom: 10px">Working hours</span>
               <span style="flex: 1">{{ worktime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1; margin-bottom: 10px"
-                >Studying hours(hour)</span
-              >
+              <span style="flex: 1; margin-bottom: 10px">Studying hours</span>
               <span style="flex: 1">{{ studytime }}</span>
             </div>
           </div>
         </el-card>
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1; margin-bottom: 10px">Sports(times)</span>
@@ -66,14 +56,8 @@
             text-align: center;
           "
         >
-          <div style="margin-bottom: 30px; text-align: center">
-            Summary of various types of time
-          </div>
-          <div
-            ref="myChart1"
-            id="myChart1"
-            style="width: 100%; height: 55vh"
-          ></div>
+          <div style="margin-bottom: 30px; text-align: center">Summary of various types of time</div>
+          <div ref="myChart1" id="myChart1" style="width: 100%; height: 55vh"></div>
         </el-card>
 
         <el-card
@@ -85,14 +69,8 @@
             text-align: center;
           "
         >
-          <div style="margin-bottom: 50px; text-align: center">
-            All kinds of time proportion
-          </div>
-          <div
-            ref="myChart"
-            id="myChart"
-            style="width: 100%; height: 55vh"
-          ></div>
+          <div style="margin-bottom: 50px; text-align: center">All kinds of time proportion</div>
+          <div ref="myChart" id="myChart" style="width: 100%; height: 55vh"></div>
         </el-card>
       </div>
     </div>
@@ -178,16 +156,23 @@ onBeforeMount(() => {
 
       let currentDate = new Date();
       let currentDay = currentDate.getDay();
-      let diff =
-        currentDate.getDate() - currentDay + (currentDay == 0 ? -6 : 1); // 计算本周周一的日期
-      let monday = new Date(currentDate.setDate(diff));
 
-      //console.log(formatDate(monday));
-      beginTime.value = formatDate(monday);
-
-      let sunday = new Date(currentDate.setDate(diff + 6)); // 计算本周周末的日期
-      //console.log(formatDate(sunday));
-      endTime.value = formatDate(sunday);
+      // 获取当前月的月初
+      const startOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+      );
+      console.log(formatDate(startOfMonth));
+      beginTime.value = formatDate(startOfMonth);
+      // 获取当前月的月末
+      const endOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+      );
+      console.log(formatDate(endOfMonth));
+      endTime.value = formatDate(endOfMonth);
 
       post(
         "/api/index/show_week",
@@ -221,23 +206,28 @@ onBeforeMount(() => {
         top: 50,
         bottom: 50,
       };
-      const series = ["chores", "sport", "sleep", "study", "work", "amusement"].map(
-        (name, sid) => {
-          return {
-            name,
-            type: "bar",
-            stack: "total",
-            barWidth: "60%",
-            label: {
-              show: true,
-              formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
-            },
-            data: rawData.value[sid].map((d, did) =>
-              totalData[did] <= 0 ? 0 : d / totalData[did]
-            ),
-          };
-        }
-      );
+      const series = [
+        "chores",
+        "sport",
+        "sleep",
+        "study",
+        "work",
+        "amusement",
+      ].map((name, sid) => {
+        return {
+          name,
+          type: "bar",
+          stack: "total",
+          barWidth: "60%",
+          label: {
+            show: true,
+            formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
+          },
+          data: rawData.value[sid].map((d, did) =>
+            totalData[did] <= 0 ? 0 : d / totalData[did]
+          ),
+        };
+      });
       option = {
         legend: {
           selectedMode: false,

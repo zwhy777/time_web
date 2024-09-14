@@ -9,9 +9,7 @@
         </div>
       </div>
       <div class="upshow">
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1; margin-bottom: 10px">Start time</span>
@@ -23,27 +21,19 @@
             </div>
           </div>
         </el-card>
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
-              <span style="flex: 1; margin-bottom: 10px"
-                >Working hours(hour)</span
-              >
+              <span style="flex: 1; margin-bottom: 10px">Working hours</span>
               <span style="flex: 1">{{ worktime }}</span>
             </div>
             <div class="endTime">
-              <span style="flex: 1; margin-bottom: 10px"
-                >Studying hours(hour)</span
-              >
+              <span style="flex: 1; margin-bottom: 10px">Studying hours</span>
               <span style="flex: 1">{{ studytime }}</span>
             </div>
           </div>
         </el-card>
-        <el-card
-          style="width: 33%; margin: 10px; text-align: center; height: 13vh"
-        >
+        <el-card style="width: 33%; margin: 10px; text-align: center; height: 13vh">
           <div class="showTime">
             <div class="beginTime">
               <span style="flex: 1; margin-bottom: 10px">Sports(times)</span>
@@ -66,14 +56,8 @@
             text-align: center;
           "
         >
-          <div style="margin-bottom: 30px; text-align: center">
-            Summary of various types of time
-          </div>
-          <div
-            ref="myChart1"
-            id="myChart1"
-            style="width: 100%; height: 55vh"
-          ></div>
+          <div style="margin-bottom: 30px; text-align: center">Summary of various types of time</div>
+          <div ref="myChart1" id="myChart1" style="width: 100%; height: 55vh"></div>
         </el-card>
 
         <el-card
@@ -85,14 +69,8 @@
             text-align: center;
           "
         >
-          <div style="margin-bottom: 50px; text-align: center">
-            All kinds of time proportion
-          </div>
-          <div
-            ref="myChart"
-            id="myChart"
-            style="width: 100%; height: 55vh"
-          ></div>
+          <div style="margin-bottom: 50px; text-align: center">All kinds of time proportion</div>
+          <div ref="myChart" id="myChart" style="width: 100%; height: 55vh"></div>
         </el-card>
       </div>
     </div>
@@ -189,6 +167,14 @@ onBeforeMount(() => {
       //console.log(formatDate(sunday));
       endTime.value = formatDate(sunday);
 
+      const currentYear = currentDate.getFullYear();
+      // 获取当前年份的第一天（1月1日）
+      const firstDate = new Date(currentYear, 0, 1);
+      // 获取当前年份的最后一天（12月31日）
+      const lastDate = new Date(currentYear, 11, 31);
+      beginTime.value = formatDate(firstDate);
+      endTime.value = formatDate(lastDate);
+
       post(
         "/api/index/show_week",
         {
@@ -221,23 +207,28 @@ onBeforeMount(() => {
         top: 50,
         bottom: 50,
       };
-      const series = ["chores", "sport", "sleep", "study", "work", "amusement"].map(
-        (name, sid) => {
-          return {
-            name,
-            type: "bar",
-            stack: "total",
-            barWidth: "60%",
-            label: {
-              show: true,
-              formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
-            },
-            data: rawData.value[sid].map((d, did) =>
-              totalData[did] <= 0 ? 0 : d / totalData[did]
-            ),
-          };
-        }
-      );
+      const series = [
+        "chores",
+        "sport",
+        "sleep",
+        "study",
+        "work",
+        "amusement",
+      ].map((name, sid) => {
+        return {
+          name,
+          type: "bar",
+          stack: "total",
+          barWidth: "60%",
+          label: {
+            show: true,
+            formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
+          },
+          data: rawData.value[sid].map((d, did) =>
+            totalData[did] <= 0 ? 0 : d / totalData[did]
+          ),
+        };
+      });
       option = {
         legend: {
           selectedMode: false,
