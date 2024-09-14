@@ -9,11 +9,7 @@
 
           <div style="float: right">
             <el-dropdown>
-              <el-button
-                :icon="More"
-                size="default"
-                style="background-color: #f2f6fc"
-              ></el-button>
+              <el-button :icon="More" size="default" style="background-color: #f2f6fc"></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="logout">Sign out</el-dropdown-item>
@@ -24,12 +20,7 @@
         </div>
         <div style="margin: 3%; height: 80vh; text-align: center; width: 80vw">
           <div style="width: 20vw; display: inline-block; margin-right: 50vw">
-            <el-segmented
-              v-model="tripType"
-              :options="options"
-              block
-              @change="changeType()"
-            />
+            <el-segmented v-model="tripType" :options="options" block @change="changeType()" />
           </div>
           <div style="display: inline-block">
             <el-button color="#c4d4ec" @click="dialogVisible = true">
@@ -49,11 +40,7 @@
                 box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
               "
             >
-              <el-form
-                :model="form"
-                label-width="auto"
-                style="max-width: 800px"
-              >
+              <el-form :model="form" label-width="auto" style="max-width: 800px">
                 <el-form-item>
                   <div class="font2">Activity name:</div>
                   <el-input
@@ -121,12 +108,7 @@
               <el-table-column prop="type" label="Activate type" width="180" />
               <el-table-column prop="id" label="Operation" fixed="right">
                 <template v-slot="{ row }">
-                  <el-button
-                    type="danger"
-                    size="small"
-                    @click="deleteLine(row.id)"
-                    >Delete</el-button
-                  >
+                  <el-button type="danger" size="small" @click="deleteLine(row.id)">Delete</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -241,6 +223,7 @@ const addTrip = () => {
     },
     (message) => {}
   );
+  tripType.value = "All activate";
 };
 
 const logout = () => {
